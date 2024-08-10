@@ -20,6 +20,9 @@ class MemberRepositoryTest {
 
   @Test
   void testMember() {
+    System.out.println("memberRepository = " + memberRepository.getClass());
+    // memberRepository = class jdk.proxy2.$Proxy129 -> 구현체는 알아서 꽂아준다
+
     Member member = Member.builder()
             .username("memberA")
             .build();
