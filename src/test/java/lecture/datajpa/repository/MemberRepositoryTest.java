@@ -191,4 +191,39 @@ class MemberRepositoryTest {
     assertThat(results.get(0)).isEqualTo(member2);
 
   }
+
+  @Test
+  void findByQuery() {
+    Member member1 = Member.builder()
+            .username("memberA")
+            .age(10)
+            .build();
+
+    Member member2 = Member.builder()
+            .username("memberB")
+            .age(20)
+            .build();
+
+    memberRepository.save(member1);
+    memberRepository.save(member2);
+
+    List<Member> results = memberRepository.findUser("memberB", 20);
+    /**
+     * select
+     *         m1_0.member_id,
+     *         m1_0.age,
+     *         m1_0.team_id,
+     *         m1_0.username
+     *     from
+     *         member m1_0
+     *     where
+     *         m1_0.username=?
+     *         and m1_0.age=?
+     */
+    assertThat(results.size()).isEqualTo(1);
+    assertThat(results.get(0).getUsername()).isEqualTo("memberB");
+    assertThat(results.get(0).getAge()).isEqualTo(20);
+    assertThat(results.get(0)).isEqualTo(member2);
+
+  }
 }
