@@ -168,4 +168,27 @@ class MemberRepositoryTest {
      */
     assertThat(result.size()).isEqualTo(2);
   }
+
+  @Test
+  void findByNamedQuery() {
+    Member member1 = Member.builder()
+            .username("memberA")
+            .age(10)
+            .build();
+
+    Member member2 = Member.builder()
+            .username("memberB")
+            .age(20)
+            .build();
+
+    memberRepository.save(member1);
+    memberRepository.save(member2);
+
+    List<Member> results = memberRepository.findByUsername("memberB");
+
+    assertThat(results.get(0).getUsername()).isEqualTo("memberB");
+    assertThat(results.get(0).getAge()).isEqualTo(20);
+    assertThat(results.get(0)).isEqualTo(member2);
+
+  }
 }

@@ -12,6 +12,11 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // jpa가 프록시 기술을 쓸 때, protected 정도로 열어 놔야 한다
 @ToString(of = {"id", "username", "age"})
+@NamedQuery(
+        name = "Member.findByUsername",
+        query = "select m from Member m where m.username = :username"
+
+)
 public class Member {
 
   @Id

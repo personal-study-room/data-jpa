@@ -2,6 +2,8 @@ package lecture.datajpa.repository;
 
 import lecture.datajpa.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,4 +14,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   List<Member> findHelloBy();
 
   List<Member> findTop2By();
+  @Query(name = "Member.findByUsername")
+  List<Member> findByUsername(@Param("username") String username);
 }
