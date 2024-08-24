@@ -1,6 +1,8 @@
 package lecture.datajpa.repository;
 
+import lecture.datajpa.dto.MemberDTO;
 import lecture.datajpa.entity.Member;
+import lecture.datajpa.entity.Team;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberRepositoryTest {
 
   private final MemberRepository memberRepository;
+  private final TeamRepository teamRepository;
 
   @Test
   void testMember() {
@@ -224,6 +227,83 @@ class MemberRepositoryTest {
     assertThat(results.get(0).getUsername()).isEqualTo("memberB");
     assertThat(results.get(0).getAge()).isEqualTo(20);
     assertThat(results.get(0)).isEqualTo(member2);
+
+  }
+
+
+  @Test
+  void findUserNameListQuery() {
+    Member member1 = Member.builder()
+            .username("memberA")
+            .age(10)
+            .build();
+
+    Member member2 = Member.builder()
+            .username("memberB")
+            .age(20)
+            .build();
+
+    memberRepository.save(member1);
+    memberRepository.save(member2);
+
+    List<String> results = memberRepository.findUsernameList();
+/**
+ *     select
+ *         m1_0.username
+ *     from
+ *         member m1_0
+ */
+    assertThat(results.size()).isEqualTo(2);
+
+  }
+
+
+
+  @Test
+  void findMemberDTO() {
+    Team teamA = Team.builder()
+            .name("teamA")
+            .build();
+
+    Team teamB = Team.builder()
+            .name("teamB")
+            .build();
+
+    teamRepository.save(teamA);
+    teamRepository.save(teamB);
+
+
+    Member member1 = Member.builder()
+            .username("member1")
+            .team(teamA)
+            .build();
+
+    Member member2 = Member.builder()
+            .username("member2")
+            .team(teamB)
+            .build();
+
+    memberRepository.save(member1);
+    memberRepository.save(member2);
+
+
+    List<MemberDTO> result = memberRepository.findMemberDTO();
+
+    /**
+     * select
+     *         m1_0.member_id,
+     *         m1_0.username,
+     *         t1_0.name
+     *     from
+     *         member m1_0
+     *     join
+     *         team t1_0
+     *             on t1_0.team_id=m1_0.team_id
+     */
+
+    for (MemberDTO memberDTO : result) {
+      System.out.println("memberDTO = " + memberDTO);
+    }
 
   }
 }
